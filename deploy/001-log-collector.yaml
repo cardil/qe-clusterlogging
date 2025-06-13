@@ -44,6 +44,23 @@ spec:
       protocol: UDP
       port: 514
       targetPort: 8514
+    - name: api
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
   selector:
     app: collector
     deployment: collector
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: collector
+  namespace: openshift-logging
+spec:
+  to:
+    kind: Service
+    name: collector
+    weight: 100
+  port:
+    targetPort: api
